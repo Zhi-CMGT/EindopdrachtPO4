@@ -1,6 +1,7 @@
 import '../css/style.css'
-import { Actor, Engine, Vector, DisplayMode } from "excalibur"
+import { Actor, Engine, Vector, DisplayMode, Keys } from "excalibur"
 import { Resources, ResourceLoader } from './resources.js'
+import { Player } from './player.js'
 
 export class Game extends Engine {
 
@@ -16,12 +17,10 @@ export class Game extends Engine {
 
     startGame() {
         console.log("start de game!")
-        const fish = new Actor()
-        fish.graphics.use(Resources.Fish.toSprite())
-        fish.pos = new Vector(500, 300)
-        fish.vel = new Vector(-10,0)
-        fish.events.on("exitviewport", (e) => this.fishLeft(e))
-        this.add(fish)
+        const player1 = new Player(Keys.Left, Keys.Right, Keys.Up, Keys.Down);
+        this.add(player1);
+
+        player1.events.on("exitviewport", (e) => this.fishLeft(e))
     }
 
     fishLeft(e) {
