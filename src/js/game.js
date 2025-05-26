@@ -1,6 +1,6 @@
 import '../css/style.css'
 import { Actor, Engine, Vector, DisplayMode, Keys } from "excalibur"
-import { Resources, ResourceLoader } from './resources.js'
+import { ResourceLoader } from './resources.js'
 import { Player } from './player.js'
 
 export class Game extends Engine {
@@ -19,11 +19,8 @@ export class Game extends Engine {
     startGame() {
         console.log("start de game!")
 
-        const background = new Actor({
-            pos: new Vector(0, 0),
-            width: this.canvasSize.x,
-            height: this.canvasSize.y
-        });
+        const background = new Actor();
+        this.add(background);
 
         const player1 = new Player(Keys.Left, Keys.Right, Keys.Up, Keys.Down);
         this.add(player1);
