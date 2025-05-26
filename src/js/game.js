@@ -13,14 +13,23 @@ export class Game extends Engine {
             displayMode: DisplayMode.FitScreen
          })
         this.start(ResourceLoader).then(() => this.startGame())
+        this.canvasSize = undefined
     }
 
     startGame() {
         console.log("start de game!")
+
+        const background = new Actor({
+            pos: new Vector(0, 0),
+            width: this.canvasSize.x,
+            height: this.canvasSize.y
+        });
+
         const player1 = new Player(Keys.Left, Keys.Right, Keys.Up, Keys.Down);
         this.add(player1);
 
-        player1.events.on("exitviewport", (e) => this.fishLeft(e))
+
+        // player1.events.on("exitviewport", (e) => this.fishLeft(e))
     }
 
     fishLeft(e) {

@@ -10,12 +10,9 @@ export class Player extends Actor {
         upKey;
         downKey;
 
-        super({
-            width: Resources.Player1.width,
-            height: Resources.Player1.height,
-        })
+        super({})
 
-        this.sprite = Resources.player1.toSprite();
+        this.sprite = Resources.Player1.toSprite();
         this.graphics.use(this.sprite);
 
         this.pos = new Vector(100, 100);
@@ -24,7 +21,7 @@ export class Player extends Actor {
         this.rightKey = rightKey;
         this.upKey = upKey; 
         this.downKey = downKey;
-        this.speed = undefined;
+        this.speed = 200;
     }
 
     onPreUpdate(engine) {
