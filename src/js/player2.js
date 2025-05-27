@@ -1,14 +1,14 @@
-import { Actor, Vector } from "excalibur";
+import { Actor, Keys, Vector } from "excalibur";
 import { Resources } from "./resources";
 
 export class player extends Actor {
 
-    constructor(leftKey, rightKey, upKey, downKey) {
+    constructor(A, D, W, S) {
 
-        leftKey;
-        rightKey;
-        upKey;
-        downKey;
+        Keys.A;
+        Keys.D;
+        Keys.W;
+        Keys.S;
 
         super()
 
@@ -17,28 +17,30 @@ export class player extends Actor {
 
         this.pos = new Vector(60, 600);
         this.scale = new Vector(0.5, 0.5);
-
-        this.leftKey = leftKey;
-        this.rightKey = rightKey;
-        this.upKey = upKey; 
-        this.downKey = downKey;
+        
+        this.Keys = {
+            A: Keys.A,
+            D: Keys.D,
+            W: Keys.W,
+            S: Keys.S
+        };
         this.speed = 200;
     }
 
     onPreUpdate(engine) {
         let xspeed = 0;
         let yspeed = 0;
-         if (engine.input.keyboard.isHeld(this.leftKey)) {
+         if (engine.input.keyboard.isHeld(this.Keys.A)) {
             xspeed = -this.speed;
         }
-        if (engine.input.keyboard.isHeld(this.rightKey)) {
+        if (engine.input.keyboard.isHeld(this.Keys.D)) {
             xspeed = this.speed;
         }
 
-        if (engine.input.keyboard.isHeld(this.upKey)) {
+        if (engine.input.keyboard.isHeld(this.Keys.W)) {
             yspeed = -this.speed;
         }
-        if (engine.input.keyboard.isHeld(this.downKey)) {
+        if (engine.input.keyboard.isHeld(this.Keys.S)) {
             yspeed = this.speed;
         }
 

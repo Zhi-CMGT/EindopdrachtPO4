@@ -1,17 +1,18 @@
 import '../css/style.css'
-import { Actor, Engine, Vector, DisplayMode, Keys } from "excalibur"
+import { Actor, Engine, DisplayMode, Keys } from "excalibur"
 import { ResourceLoader } from './resources.js'
-import { Player } from './player.js'
+import { player } from './player.js'
+import { Background } from './background.js'
 
 export class Game extends Engine {
 
     constructor() {
-        super({ 
+        super({
             width: 1280,
             height: 720,
             maxFps: 60,
             displayMode: DisplayMode.FitScreen
-         })
+        })
         this.start(ResourceLoader).then(() => this.startGame())
         this.canvasSize = undefined
     }
@@ -19,18 +20,16 @@ export class Game extends Engine {
     startGame() {
         console.log("start de game!")
 
-        const background = new Actor();
+        const background = new Background();
         this.add(background);
 
-        const player1 = new Player(Keys.Left, Keys.Right, Keys.Up, Keys.Down);
+        const player1 = new player(Keys.Left, Keys.Right, Keys.Up, Keys.Down);
         this.add(player1);
 
+        const player2 = new player(Keys.A, Keys.D, Keys.W, Keys.S);
+        this.add(player2);
 
         // player1.events.on("exitviewport", (e) => this.fishLeft(e))
-    }
-
-    fishLeft(e) {
-        e.target.pos = new Vector(1350, 300)
     }
 }
 

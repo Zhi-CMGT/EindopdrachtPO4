@@ -1,12 +1,14 @@
-import { Actor } from "excalibur";
+import { Actor, Vector } from "excalibur";
 import { Resources } from "./resources";
 
 export class Background extends Actor {
 
-    constructor() {
+    constructor(x,y, screenWidth, screenHeight) {
         super({
-            width: Resources.Background.width,
-            height: Resources.Background.height,
+            x,y,
+            anchor: new Vector(0, 0),
+            width: screenWidth,
+            height: screenHeight,
         });
 
         this.graphics.use(Resources.Background.toSprite());
