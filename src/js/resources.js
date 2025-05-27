@@ -1,11 +1,12 @@
 import { ImageSource, Loader } from 'excalibur'
+import { StartPlatform } from './startPlatform'
 
 // voeg hier jouw eigen resources toe
 const Resources = {
     Player1: new ImageSource('images/player1.png'),
     Player2: new ImageSource('images/player2.png'),
     Background: new ImageSource('images/background3.jpg'),
-    Platform: new ImageSource('images/platform.png'),
+    StartPlatform: new ImageSource('images/platform.jpg'),
 }
 
 const ResourceLoader = new Loader()

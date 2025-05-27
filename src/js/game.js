@@ -4,6 +4,7 @@ import { ResourceLoader, Resources } from './resources.js'
 import { player } from './player.js'
 import { Background } from './background.js'
 import { platform } from './platform.js'
+import { StartPlatform } from './startPlatform.js'
 
 export class Game extends Engine {
 
@@ -47,7 +48,7 @@ export class Game extends Engine {
         );
         this.add(player2);
 
-        this.add(new platform(100, 600));
+        this.add(new StartPlatform(100, 600));
 
         // player1.events.on("exitviewport", (e) => this.fishLeft(e))
     }
