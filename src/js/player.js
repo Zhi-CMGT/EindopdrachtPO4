@@ -1,14 +1,9 @@
-import { Actor, CollisionType, DegreeOfFreedom, Vector } from "excalibur";
+import { Actor, CollisionType, DegreeOfFreedom, Shape, Vector } from "excalibur";
 import { Resources } from "./resources";
 
 export class player extends Actor {
 
     constructor(leftKey, rightKey, upKey, downKey, sprite, startPos) {
-
-        leftKey;
-        rightKey;
-        upKey;
-        downKey;
 
         super({
             pos: startPos,
@@ -17,11 +12,7 @@ export class player extends Actor {
         }
         )
 
-        // this.sprite = Resources.Player1.toSprite();
         this.graphics.use(sprite);
-
-        // this.pos = new Vector(60, 600);
-        // this.scale = new Vector(0.5, 0.5);
 
         this.leftKey = leftKey;
         this.rightKey = rightKey;
@@ -34,11 +25,12 @@ export class player extends Actor {
         this.body.useGravity = true;
         this.body.collisionType = CollisionType.Active;
         this.body.limitDegreeOfFreedom.push(DegreeOfFreedom.Rotation);
+
     }
 
-    onPreUpdate(engine, delta) {
+    onPreUpdate(engine) {
         let xspeed = 0;
-        let yspeed = 0;
+
          if (engine.input.keyboard.isHeld(this.leftKey)) {
             xspeed = -this.speed;
         }
@@ -47,14 +39,9 @@ export class player extends Actor {
         }
 
         if (engine.input.keyboard.wasPressed(this.upKey)) {
-            // @ts-ignore
-            this.body.applyAngularImpulse(new Vector(0, -250 * delta))
-            yspeed = -this.speed;
-        }
-        if (engine.input.keyboard.isHeld(this.downKey)) {
-            yspeed = this.speed;
+            this.vel.y = -500;
         }
 
-        this.vel = new Vector(xspeed, yspeed);
+        this.vel.x = xspeed;
     }
 }

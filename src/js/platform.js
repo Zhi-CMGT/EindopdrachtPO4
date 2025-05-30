@@ -1,16 +1,25 @@
-import { Actor, CollisionType } from "excalibur";
+import { Actor, CollisionType, Shape, Vector } from "excalibur";
 import { Resources } from "./resources";
 
-export class platform extends Actor {
+export class Platform extends Actor {
 
-  constructor(x, y,) {
+    constructor(x, y, width, height) {
 
-    super({
-        
-    })
+        super({
+            pos: new Vector(x, y),
+            width: width,
+            height: height,
+            collisionType: CollisionType.Fixed,
 
-    this.graphics.use(Resources.Platform.toSprite());
-  }
+        })
 
+        const sprite = Resources.Platform.toSprite();
+        sprite.scale = new Vector(width / sprite.width, height / sprite.height); // Schaal de sprite
+        this.graphics.use(sprite);
+    }
 
+    onInitialize(engine) {
+        this.body.collisionType = CollisionType.Fixed;
+        this.collider.set(Shape.Box(this.width, this.height));
+    }
 }

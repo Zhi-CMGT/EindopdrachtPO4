@@ -9,6 +9,7 @@ export class Background extends Actor {
             anchor: new Vector(0, 0),
             width: screenWidth,
             height: screenHeight,
+            opacity: 0.7
         });
 
         this.graphics.use(Resources.Background.toSprite());
