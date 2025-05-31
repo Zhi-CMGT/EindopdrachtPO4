@@ -1,10 +1,15 @@
 import '../css/style.css'
 // @ts-ignore
-import { Actor, Engine, DisplayMode, Keys, Resource, Vector, SolverStrategy } from "excalibur"
+import { Actor, Engine, DisplayMode, Keys, Vector, SolverStrategy, Label, Font, Color } from "excalibur"
 import { ResourceLoader, Resources } from './resources.js'
 import { player } from './player.js'
 import { Background } from './background.js'
 import { Platform } from './platform.js'
+import { Obstacle } from './obstacle.js'
+import { StartPlatform } from './startPlatform.js'
+import { Point } from './point.js'
+// @ts-ignore
+import { UI } from './ui.js'
 
 export class Game extends Engine {
 
@@ -20,8 +25,16 @@ export class Game extends Engine {
             }
         });
 
+        // @ts-ignore
+        this.highScore = parseInt(localStorage.getItem(`highScore`)) || 0;
+        // @ts-ignore
+        this.playerLives = parseInt(localStorage.getItem(`playerLives`)) || 3;
+        this.gameHasEnded = false;
+
         this.start(ResourceLoader).then(() => this.startGame())
+        this.player = undefined
     }
+
 
 
 
@@ -31,15 +44,9 @@ export class Game extends Engine {
         const background = new Background();
         this.add(background);
 
-        this.add(new Platform(150, 700, 300, 150));
-        this.add(new Platform(1100, 700, 300, 150));
-        this.add(new Platform(350, 600, 300, 150));
-        this.add(new Platform(220, 450, 300, 150));
-        this.add(new Platform(580, 500, 300, 150));
-        this.add(new Platform(880, 600, 300, 150));
-        this.add(new Platform(1100, 480, 300, 150));
-        this.add(new Platform(1100, 700, 300, 150));
-
+        this.scoreTracker = { score: 0 };
+        this.highScoreTracker = { highScore: this.highScore };
+        this.playerLivesTracker = { playerLives: this.playerLives };
 
         const player1 = new player(
             Keys.Left,
@@ -47,7 +54,7 @@ export class Game extends Engine {
             Keys.Up,
             Keys.Down,
             Resources.Player1.toSprite(),
-            new Vector(110, 550)
+            new Vector(110, 600)
         );
         this.add(player1);
 
@@ -57,13 +64,87 @@ export class Game extends Engine {
             Keys.W,
             Keys.S,
             Resources.Player2.toSprite(),
-            new Vector(1100, 550)
+            new Vector(1100, 600)
         );
         this.add(player2);
+
+        this.add(new StartPlatform(150, 700));
+        this.add(new StartPlatform(1100, 700));
+
+        this.add(new Platform(400, 600));
+        this.add(new Platform(750, 600));
+
+        this.add(new Platform(90, 470));
+        this.add(new Platform(1050, 470));
+
+        this.add(new Platform(650, 340));
+        this.add(new Platform(1250, 340));
+
+        this.add(new Platform(180, 200));
+        this.add(new Platform(950, 220));
+
+        this.add(new Platform(600, 120));
+
+
+        for (let i = 0; i < 5; i++) {
+            const platforms = this.currentScene.actors.filter(actor => actor instanceof Platform);
+
+            const randomPlatform = platforms[Math.floor(Math.random() * platforms.length)];
+
+            const obstacleX = randomPlatform.pos.x + (Math.random() * (randomPlatform.width - 30));
+            const obstacleY = randomPlatform.pos.y - 55;
+
+            const obstacle = new Obstacle(obstacleX, obstacleY);
+            this.add(obstacle);
+        }
+
+        for (let i = 0; i < 10; i++) {
+            this.add(new Point(Math.random() * 1000, Math.random() * 600));
+        }
+
+        // @ts-ignore
+        this.ui = new GameUI(
+            this.player,
+            this.scoreTracker,
+            this.highScoreTracker,
+            this.playerLivesTracker
+        );
+        this.add(this.ui);
+
+        this.on("postupdate", () => {
+            if (!this.gameHasEnded && (this.player.health <= 0)) {
+                // @ts-ignore
+                this.gameOver();
+            }
+        });
+
+        this.showDebug(true);
 
         // player1.events.on("exitviewport", (e) => this.fishLeft(e))
     }
 
+    gameOver() {
+        this.gameHasEnded = true;
+        console.log("Game Over!");
+
+        // @ts-ignore
+        if (this.scoreTracker.score > this.highScore) {
+            // @ts-ignore
+            this.highScore = this.scoreTracker.score;
+            // @ts-ignore
+            localStorage.setItem(`highScore`, this.highScore.toString());
+            // @ts-ignore
+            this.highScoreTracker.highScore = this.highScore;
+            console.log(`New high score: ${this.highScore}`);
+        }
+
+        setTimeout(() => window.location.reload(), 3000);
+    }
 }
 
 new Game()
+
+function gameOver() {
+    throw new Error('Function not implemented.')
+}
+

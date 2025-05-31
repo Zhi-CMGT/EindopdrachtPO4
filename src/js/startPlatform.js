@@ -1,7 +1,7 @@
 import { Actor, CollisionType, Shape, Vector } from "excalibur";
 import { Resources } from "./resources";
 
-export class Platform extends Actor {
+export class StartPlatform extends Actor {
 
     constructor(x, y, width, height) {
 
