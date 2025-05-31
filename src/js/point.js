@@ -19,6 +19,9 @@ export class Point extends Actor {
         this.scale = new Vector(0.09, 0.09);
 
         this.collider.set(Shape.Box(200, 350, Vector.Half, new Vector(0, 0)));
+    }
 
+    hit() {
+        this.kill();
     }
 }

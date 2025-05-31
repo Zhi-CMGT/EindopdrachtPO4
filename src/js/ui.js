@@ -1,18 +1,23 @@
 import { Actor, Label, Font, Color, Vector, FontUnit } from "excalibur";
 
 export class UI extends Actor {
-    constructor(player, scoreTracker, highScoreTracker, playerLivesTracker) {
+
+    scoreLabel;
+    highScoreLabel;
+    livesLabel;
+
+    constructor(players, scoreTracker, highScoreTracker, playerLivesTracker) {
         super({
             x: 0,
             y: 0,
             z: 100
-        })
+        });
 
-        this.player = player;
-        this.scoreTracker = scoreTracker;
-        this.highScoreTracker = highScoreTracker;
-        this.playerLivesTracker = playerLivesTracker;
-        this.playerLivesLabel = undefined;
+        this.player1 = this.player1;
+        this.player2 = this.player2;
+        this.scoreTracker = scoreTracker ?? { score: 0 };
+        this.highScoreTracker = highScoreTracker ?? { highScore: 0 };
+        this.playerLivesTracker = playerLivesTracker ?? { playerLives: 3 };
     }
 
     onInitialize(engine) {
@@ -24,30 +29,34 @@ export class UI extends Actor {
         });
 
         this.scoreLabel = new Label({
-            text: `Score: 0`,
+            text: `Score: ${this.scoreTracker.score}`,
             pos: new Vector(20, 20),
             font: font
         });
 
         this.highScoreLabel = new Label({
-            text: `High Score: ${this.highScoreTracker?.score ?? 0}`,
+            text: `High Score: ${this.highScoreTracker.highScore}`,
             pos: new Vector(20, 45),
+            font: font
+        });
+
+        this.livesLabel = new Label({
+            text: `Lives: ${this.playerLivesTracker.playerLives}`,
+            pos: new Vector(20, 70),
             font: font
         });
 
         this.addChild(this.scoreLabel);
         this.addChild(this.highScoreLabel);
-        this.addChild(this.player);
-
+        this.addChild(this.livesLabel);
     }
 
-    onPreUpdate() {
-        if (!this.scoreTracker || !this.highScoreTracker || !this.playerLivesTracker) return;
-
-        // @ts-ignore
-        this.scoreLabel.text = `Score: ${this.scoreTracker.score}`;
-        // @ts-ignore
-        this.highScoreLabel.text = `High Score: ${this.highScoreTracker.score}`;
-        this.playerLivesLabel.text = `Lives: ${this.playerLivesTracker.lives}`;
-    }
+    updateScore() {
+        if (!this.scoreTracker || !this.highScoreTracker || !this.playerLivesTracker) {
+            return;
+        }
+        
+        this.scoreLabel.text = `Score: ${this.scoreTracker.score ?? 0}`;
+        this.highScoreLabel.text = `High Score: ${this.highScoreTracker.highScore ?? 0}`;
+        this.livesLabel.text = `Lives: ${this.playerLivesTracker.playerLives ?? 3}`;    }
 }

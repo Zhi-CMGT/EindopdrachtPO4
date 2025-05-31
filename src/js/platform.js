@@ -3,7 +3,7 @@ import { Resources } from "./resources";
 
 export class Platform extends Actor {
 
-    constructor(x, y, width, height) {
+    constructor(x, y, width = 300, height = 150) {
 
         super({
             pos: new Vector(x, y),
@@ -18,7 +18,7 @@ export class Platform extends Actor {
     onInitialize(engine) {
         this.graphics.use(Resources.Platform.toSprite());
         this.scale = new Vector(0.5, 0.35);
-        this.collider.set(Shape.Box(500, 100, Vector.Half, new Vector(0, -15)));
+        this.collider.set(Shape.Box(this.width, this.height, Vector.Half, new Vector(0, -15)));
 
 
     }

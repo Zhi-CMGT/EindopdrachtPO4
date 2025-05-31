@@ -1,5 +1,4 @@
 import '../css/style.css'
-// @ts-ignore
 import { Actor, Engine, DisplayMode, Keys, Vector, SolverStrategy, Label, Font, Color } from "excalibur"
 import { ResourceLoader, Resources } from './resources.js'
 import { player } from './player.js'
@@ -8,10 +7,14 @@ import { Platform } from './platform.js'
 import { Obstacle } from './obstacle.js'
 import { StartPlatform } from './startPlatform.js'
 import { Point } from './point.js'
-// @ts-ignore
 import { UI } from './ui.js'
 
 export class Game extends Engine {
+
+    ui;
+    scoreTracker;
+    highScoreTracker;
+    playerLivesTracker;
 
     constructor() {
         super({
@@ -25,18 +28,14 @@ export class Game extends Engine {
             }
         });
 
-        // @ts-ignore
-        this.highScore = parseInt(localStorage.getItem(`highScore`)) || 0;
-        // @ts-ignore
-        this.playerLives = parseInt(localStorage.getItem(`playerLives`)) || 3;
+        this.highScore = (localStorage.getItem(`highScore`)) || 0;
+        this.playerLives = (localStorage.getItem(`playerLives`)) || 3;
         this.gameHasEnded = false;
+        this.players = [];
 
         this.start(ResourceLoader).then(() => this.startGame())
-        this.player = undefined
+        
     }
-
-
-
 
     startGame() {
         console.log("start de game!")
@@ -44,7 +43,8 @@ export class Game extends Engine {
         const background = new Background();
         this.add(background);
 
-        this.scoreTracker = { score: 0 };
+
+        this.scoreTracker = {score: 0};
         this.highScoreTracker = { highScore: this.highScore };
         this.playerLivesTracker = { playerLives: this.playerLives };
 
@@ -67,6 +67,8 @@ export class Game extends Engine {
             new Vector(1100, 600)
         );
         this.add(player2);
+
+        this.players.push(player1, player2);
 
         this.add(new StartPlatform(150, 700));
         this.add(new StartPlatform(1100, 700));
@@ -99,12 +101,13 @@ export class Game extends Engine {
         }
 
         for (let i = 0; i < 10; i++) {
-            this.add(new Point(Math.random() * 1000, Math.random() * 600));
+            const pointX = Math.random() * this.drawWidth;
+            const pointY = Math.random() * this.drawHeight;
+            this.add(new Point(pointX, pointY));
         }
 
-        // @ts-ignore
-        this.ui = new GameUI(
-            this.player,
+        this.ui = new UI(
+            [player1, player2],
             this.scoreTracker,
             this.highScoreTracker,
             this.playerLivesTracker
@@ -112,28 +115,23 @@ export class Game extends Engine {
         this.add(this.ui);
 
         this.on("postupdate", () => {
-            if (!this.gameHasEnded && (this.player.health <= 0)) {
-                // @ts-ignore
-                this.gameOver();
+            for (const player of this.players) {
+                if (player.health <= 0 && !this.gameHasEnded) {
+                    this.gameOver();
+                }
             }
         });
 
         this.showDebug(true);
-
-        // player1.events.on("exitviewport", (e) => this.fishLeft(e))
     }
 
     gameOver() {
         this.gameHasEnded = true;
         console.log("Game Over!");
 
-        // @ts-ignore
         if (this.scoreTracker.score > this.highScore) {
-            // @ts-ignore
             this.highScore = this.scoreTracker.score;
-            // @ts-ignore
             localStorage.setItem(`highScore`, this.highScore.toString());
-            // @ts-ignore
             this.highScoreTracker.highScore = this.highScore;
             console.log(`New high score: ${this.highScore}`);
         }
@@ -143,8 +141,3 @@ export class Game extends Engine {
 }
 
 new Game()
-
-function gameOver() {
-    throw new Error('Function not implemented.')
-}
-

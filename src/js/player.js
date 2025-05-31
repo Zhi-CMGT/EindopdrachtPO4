@@ -1,9 +1,12 @@
-import { Actor, CollisionType, Color, DegreeOfFreedom, Font, Label, Shape, Vector } from "excalibur";
-import { Resources } from "./resources";
-import { Platform } from "./platform";
+import { Actor, CollisionType, Color, DegreeOfFreedom, Engine, Font, Label, Shape, Vector } from "excalibur";
 import { Obstacle } from "./obstacle";
+import { Point } from "./point";
+import { Enemy } from "./enemy";
 
 export class player extends Actor {
+
+    score = 0;
+    health = 3;
 
     constructor(leftKey, rightKey, upKey, downKey, sprite, startPos, playerNumber) {
 
@@ -22,9 +25,6 @@ export class player extends Actor {
         this.upKey = upKey;
         this.downKey = downKey;
         this.speed = 200;
-
-        this.health = 3;        
-
     }
 
     onInitialize(engine) {
@@ -51,10 +51,23 @@ export class player extends Actor {
         this.vel.x = xspeed;
     }
 
-    handleCollision(event) {
-        if (event.other instanceof Obstacle) {
-            event.other.kill();
+    handleCollision(e) {
+        if (e.other instanceof Obstacle) {
+            e.other.kill();
+            this.health--;
+            this.scene?.engine.ui.updateScore(this.health);
+        }
 
+        if (e.other instanceof Point) {
+            e.other.hit();
+            this.score++;
+            this.scene?.engine.ui.updateScore(this.score);
+        }
+
+        if (e.other instanceof Enemy) {
+            e.other.kill();
+            this.health--;
+            this.scene?.engine.ui.updateScore(this.health);
         }
     }
 }

@@ -20,11 +20,14 @@ export class Enemy extends Actor {
 
         this.collider.set(Shape.Box(200, 350, Vector.Half, new Vector(0, 0)));
 
-        // @ts-ignore
-        this.on("collisionstart"), (e) => {
-            if (e.other.owner instanceof player) {
-                e.other.owner.kill();
+        this.on("collisionstart", (e) => {
+            if (e.other instanceof player) {
+                e.other.kill();
             }
-        }
+        });
+    }
+
+    hit() {
+        this.kill();
     }
 }
