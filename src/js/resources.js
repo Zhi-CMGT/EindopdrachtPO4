@@ -9,7 +9,7 @@ const Resources = {
     Platform: new ImageSource('images/platform.png'),
     Obstacle: new ImageSource('images/obstacle.png'),
     Point: new ImageSource('images/point.png'),
-    Enemy: new ImageSource('images/enemy.png'),
+    Portal: new ImageSource('images/portal.png'),
 
 }
 

@@ -1,5 +1,5 @@
 import '../css/style.css'
-import { Engine, DisplayMode, Keys, Vector, SolverStrategy, Label, Font, Color } from "excalibur"
+import { Engine, DisplayMode, Keys, Vector, SolverStrategy } from "excalibur"
 import { ResourceLoader, Resources } from './resources.js'
 import { player } from './player.js'
 import { Background } from './background.js'
@@ -8,7 +8,6 @@ import { Obstacle } from './obstacle.js'
 import { StartPlatform } from './startPlatform.js'
 import { Point } from './point.js'
 import { UI } from './ui.js'
-import { Enemy } from './enemy.js'
 
 export class Game extends Engine {
 
@@ -35,7 +34,7 @@ export class Game extends Engine {
         this.players = [];
 
         this.start(ResourceLoader).then(() => this.startGame())
-        
+
     }
 
     startGame() {
@@ -44,8 +43,7 @@ export class Game extends Engine {
         const background = new Background();
         this.add(background);
 
-
-        this.scoreTracker = {score: 0};
+        this.scoreTracker = { score: 0 };
         this.highScoreTracker = { highScore: this.highScore };
         this.playerLivesTracker = { playerLives: this.playerLives };
 
@@ -73,6 +71,7 @@ export class Game extends Engine {
 
         this.add(new StartPlatform(150, 700));
         this.add(new StartPlatform(1100, 700));
+        this.add(new StartPlatform(180, 200));
 
         this.add(new Platform(400, 600));
         this.add(new Platform(750, 600));
@@ -83,11 +82,9 @@ export class Game extends Engine {
         this.add(new Platform(650, 340));
         this.add(new Platform(1250, 340));
 
-        this.add(new Platform(180, 200));
         this.add(new Platform(950, 220));
 
         this.add(new Platform(600, 120));
-
 
         for (let i = 0; i < 5; i++) {
             const platforms = this.currentScene.actors.filter(actor => actor instanceof Platform);
@@ -101,13 +98,23 @@ export class Game extends Engine {
             this.add(obstacle);
         }
 
-        for (let i = 0; i < 10; i++) {
-            const pointX = Math.random() * this.drawWidth;
-            const pointY = Math.random() * this.drawHeight;
-            this.add(new Point(pointX, pointY));
-        }
+        const pointRows = [
+            { x: 150, y: 500 },
+            { x: 300, y: 300 },
+            { x: 580, y: 450 },
+            { x: 700, y: 150 },
+            { x: 850, y: 350 },
+            { x: 1100, y: 100 }
+        ];
 
-        this.add(new Enemy)
+        const spacing = 50;
+        const pointsPerRow = 4;
+
+        pointRows.forEach(({ x, y }) => {
+            for (let i = 0; i < pointsPerRow; i++) {
+                this.add(new Point(x + (i * spacing), y));
+            }
+        });
 
         this.ui = new UI(
             [player1, player2],

@@ -1,7 +1,6 @@
 import { Actor, CollisionType, DegreeOfFreedom, Shape, Vector } from "excalibur";
 import { Obstacle } from "./obstacle";
 import { Point } from "./point";
-import { Enemy } from "./enemy";
 
 export class player extends Actor {
 
@@ -27,7 +26,6 @@ export class player extends Actor {
         this.speed = 200;
     }
 
-    // @ts-ignore
     onInitialize(engine) {
         this.body.useGravity = true;
         this.body.limitDegreeOfFreedom.push(DegreeOfFreedom.Rotation);
@@ -69,13 +67,6 @@ export class player extends Actor {
             this.score++;
             // @ts-ignore
             this.scene?.engine.ui.updateScore(this.score);
-        }
-
-        if (e.other.owner instanceof Enemy) {
-            e.other.owner.kill();
-            this.health--;
-            // @ts-ignore
-            this.scene?.engine.ui.updateLives(this.health);
         }
     }
 }
