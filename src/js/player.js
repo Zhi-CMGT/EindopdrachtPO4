@@ -1,4 +1,4 @@
-import { Actor, CollisionType, Color, DegreeOfFreedom, Engine, Font, Label, Shape, Vector } from "excalibur";
+import { Actor, CollisionType, DegreeOfFreedom, Shape, Vector } from "excalibur";
 import { Obstacle } from "./obstacle";
 import { Point } from "./point";
 import { Enemy } from "./enemy";
@@ -8,7 +8,7 @@ export class player extends Actor {
     score = 0;
     health = 3;
 
-    constructor(leftKey, rightKey, upKey, downKey, sprite, startPos, playerNumber) {
+    constructor(leftKey, rightKey, upKey, downKey, sprite, startPos) {
 
         super({
             pos: startPos,
@@ -27,6 +27,7 @@ export class player extends Actor {
         this.speed = 200;
     }
 
+    // @ts-ignore
     onInitialize(engine) {
         this.body.useGravity = true;
         this.body.limitDegreeOfFreedom.push(DegreeOfFreedom.Rotation);
@@ -49,25 +50,32 @@ export class player extends Actor {
         }
 
         this.vel.x = xspeed;
+
+        if (this.pos.y > 720 && !engine.gameHasEnded) {
+            this.health = 0;
+        }
     }
 
     handleCollision(e) {
-        if (e.other instanceof Obstacle) {
-            e.other.kill();
+        if (e.other.owner instanceof Obstacle) {
+            e.other.owner.hit();
             this.health--;
-            this.scene?.engine.ui.updateScore(this.health);
+            // @ts-ignore
+            this.scene?.engine.ui.updateLives(this.health);
         }
 
-        if (e.other instanceof Point) {
-            e.other.hit();
+        if (e.other.owner instanceof Point) {
+            e.other.owner.hit();
             this.score++;
+            // @ts-ignore
             this.scene?.engine.ui.updateScore(this.score);
         }
 
-        if (e.other instanceof Enemy) {
-            e.other.kill();
+        if (e.other.owner instanceof Enemy) {
+            e.other.owner.kill();
             this.health--;
-            this.scene?.engine.ui.updateScore(this.health);
+            // @ts-ignore
+            this.scene?.engine.ui.updateLives(this.health);
         }
     }
 }

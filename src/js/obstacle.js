@@ -14,10 +14,13 @@ export class Obstacle extends Actor {
     }
 
     onInitialize(engine) {
-        this.graphics.use(Resources.Obstacle.toSprite());
-        this.scale = new Vector(0.15, 0.15);
+        this.graphics.use(Resources.Enemy.toSprite());
+        this.scale = new Vector(0.2, 0.2);
         this.collider.set(Shape.Box(200, 350, Vector.Half, new Vector(0, 0)));
     }
 
-    
+    hit() {
+        this.actions.blink(this.width, this.height)
+    }
+
 }

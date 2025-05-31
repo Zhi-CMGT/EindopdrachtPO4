@@ -14,7 +14,7 @@ export class UI extends Actor {
         });
 
         this.player1 = this.player1;
-        this.player2 = this.player2;
+        // this.player2 = this.player2;
         this.scoreTracker = scoreTracker ?? { score: 0 };
         this.highScoreTracker = highScoreTracker ?? { highScore: 0 };
         this.playerLivesTracker = playerLivesTracker ?? { playerLives: 3 };
@@ -25,7 +25,7 @@ export class UI extends Actor {
             family: 'Arial',
             size: 24,
             unit: FontUnit.Px,
-            color: Color.Blue
+            color: Color.White
         });
 
         this.scoreLabel = new Label({
@@ -51,12 +51,13 @@ export class UI extends Actor {
         this.addChild(this.livesLabel);
     }
 
-    updateScore() {
-        if (!this.scoreTracker || !this.highScoreTracker || !this.playerLivesTracker) {
-            return;
-        }
-        
-        this.scoreLabel.text = `Score: ${this.scoreTracker.score ?? 0}`;
-        this.highScoreLabel.text = `High Score: ${this.highScoreTracker.highScore ?? 0}`;
-        this.livesLabel.text = `Lives: ${this.playerLivesTracker.playerLives ?? 3}`;    }
+
+    updateScore(score) {
+        this.scoreLabel.text = `Score: ${score}`;
+        this.highScoreLabel.text = `High Score: ${this.highScoreTracker.highScore}`;
+    }
+
+    updateLives(lives) {
+        this.livesLabel.text = `Lives: ${lives}`;
+    }
 }

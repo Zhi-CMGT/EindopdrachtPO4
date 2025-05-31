@@ -1,5 +1,5 @@
 import '../css/style.css'
-import { Actor, Engine, DisplayMode, Keys, Vector, SolverStrategy, Label, Font, Color } from "excalibur"
+import { Engine, DisplayMode, Keys, Vector, SolverStrategy, Label, Font, Color } from "excalibur"
 import { ResourceLoader, Resources } from './resources.js'
 import { player } from './player.js'
 import { Background } from './background.js'
@@ -8,6 +8,7 @@ import { Obstacle } from './obstacle.js'
 import { StartPlatform } from './startPlatform.js'
 import { Point } from './point.js'
 import { UI } from './ui.js'
+import { Enemy } from './enemy.js'
 
 export class Game extends Engine {
 
@@ -106,6 +107,8 @@ export class Game extends Engine {
             this.add(new Point(pointX, pointY));
         }
 
+        this.add(new Enemy)
+
         this.ui = new UI(
             [player1, player2],
             this.scoreTracker,
@@ -136,7 +139,7 @@ export class Game extends Engine {
             console.log(`New high score: ${this.highScore}`);
         }
 
-        setTimeout(() => window.location.reload(), 3000);
+        setTimeout(() => window.location.reload(), 200);
     }
 }
 
