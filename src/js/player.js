@@ -1,7 +1,7 @@
 import { Actor, CollisionType, DegreeOfFreedom, Shape, Vector } from "excalibur";
 import { Obstacle } from "./obstacle";
 import { Point } from "./point";
-import { Enemy } from "./enemy";
+import { Portal } from "./portal";
 
 export class player extends Actor {
 
@@ -71,11 +71,8 @@ export class player extends Actor {
             this.scene?.engine.ui.updateScore(this.score);
         }
 
-        if (e.other.owner instanceof Enemy) {
-            e.other.owner.kill();
-            this.health--;
-            // @ts-ignore
-            this.scene?.engine.ui.updateLives(this.health);
+        if (e.other.owner instanceof Portal) {
+            e.other.owner.hit();
         }
     }
 }
