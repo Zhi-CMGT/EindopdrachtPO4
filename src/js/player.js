@@ -11,7 +11,7 @@ export class Player extends Actor {
     #rightKey;
     #upKey;
     #downKey;
-    isGrounded = false;
+    #isGrounded = false;
     #speed = 200;
 
     constructor(leftKey, rightKey, upKey, downKey, sprite, startPos) {

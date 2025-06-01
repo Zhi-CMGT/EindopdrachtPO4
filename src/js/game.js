@@ -12,12 +12,12 @@ import { Portal } from './portal.js'
 
 export class Game extends Engine {
 
-    ui;
+    #ui;
     scoreTracker;
     highScoreTracker;
     playerLivesTracker;
-    totalPoints = 0;
-    collectedPoints = 0;
+    #totalPoints = 0;
+    #collectedPoints = 0;
 
     constructor() {
         super({
@@ -112,7 +112,7 @@ export class Game extends Engine {
         pointRows.forEach(({ x, y }) => {
             for (let i = 0; i < pointsPerRow; i++) {
                 this.add(new Point(x + (i * spacing), y));
-                this.totalPoints++;
+                this.#totalPoints++;
             }
         });
 
