@@ -1,22 +1,23 @@
-import { Actor, CollisionType, DegreeOfFreedom, Shape, Vector } from "excalibur";
+import { Actor, CollisionType, DegreeOfFreedom, Shape, Side, Vector } from "excalibur";
 import { Obstacle } from "./obstacle";
 import { Point } from "./point";
 import { Portal } from "./portal";
+// @ts-ignore
+import { Game } from "./game";
 
-export class player extends Actor {
+export class Player extends Actor {
 
     score = 0;
     health = 3;
+    isGrounded = false;
 
     constructor(leftKey, rightKey, upKey, downKey, sprite, startPos) {
-
         super({
             pos: startPos,
             scale: new Vector(0.5, 0.5),
             collisionType: CollisionType.Active,
             collider: Shape.Box(100, 170, Vector.Half, new Vector(0, 0)),
-        }
-        )
+        });
 
         this.graphics.use(sprite);
 
@@ -31,8 +32,20 @@ export class player extends Actor {
     onInitialize(engine) {
         this.body.useGravity = true;
         this.body.limitDegreeOfFreedom.push(DegreeOfFreedom.Rotation);
-        this.on("collisionstart", (event) => this.handleCollision(event));
 
+        this.on("collisionstart", (event) => {
+            this.handleCollision(event);
+
+            if (event.side === Side.Bottom) {
+                this.isGrounded = true;
+            }
+        });
+
+        this.on("collisionend", (event) => {
+            if (event.side === Side.Bottom) {
+                this.isGrounded = false;
+            }
+        });
     }
 
     onPreUpdate(engine) {
@@ -45,8 +58,9 @@ export class player extends Actor {
             xspeed = this.speed;
         }
 
-        if (engine.input.keyboard.wasPressed(this.upKey)) {
+        if (engine.input.keyboard.wasPressed(this.upKey) && this.isGrounded) {
             this.vel.y = -480;
+            this.isGrounded = false;
         }
 
         this.vel.x = xspeed;
@@ -69,10 +83,18 @@ export class player extends Actor {
             this.score++;
             // @ts-ignore
             this.scene?.engine.ui.updateScore(this.score);
+            // @ts-ignore
+            this.scene.engine.collectedPoints++;
         }
 
         if (e.other.owner instanceof Portal) {
             e.other.owner.hit();
+
+            // @ts-ignore
+            if (this.scene?.engine.collectedPoints >= this.scene?.engine.totalPoints) {
+                // @ts-ignore
+                this.scene?.engine.gameCompleted();
+            }
         }
     }
 }

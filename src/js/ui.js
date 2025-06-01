@@ -2,9 +2,9 @@ import { Actor, Label, Font, Color, Vector, FontUnit } from "excalibur";
 
 export class UI extends Actor {
 
-    scoreLabel;
-    highScoreLabel;
-    livesLabel;
+    #scoreLabel;
+    #highScoreLabel;
+    #livesLabel;
 
     constructor(players, scoreTracker, highScoreTracker, playerLivesTracker) {
         super({
@@ -28,36 +28,36 @@ export class UI extends Actor {
             color: Color.White
         });
 
-        this.scoreLabel = new Label({
+        this.#scoreLabel = new Label({
             text: `Score: ${this.scoreTracker.score}`,
             pos: new Vector(20, 20),
             font: font
         });
 
-        this.highScoreLabel = new Label({
+        this.#highScoreLabel = new Label({
             text: `High Score: ${this.highScoreTracker.highScore}`,
             pos: new Vector(20, 45),
             font: font
         });
 
-        this.livesLabel = new Label({
+        this.#livesLabel = new Label({
             text: `Lives: ${this.playerLivesTracker.playerLives}`,
             pos: new Vector(20, 70),
             font: font
         });
 
-        this.addChild(this.scoreLabel);
-        this.addChild(this.highScoreLabel);
-        this.addChild(this.livesLabel);
+        this.addChild(this.#scoreLabel);
+        this.addChild(this.#highScoreLabel);
+        this.addChild(this.#livesLabel);
     }
 
 
     updateScore(score) {
-        this.scoreLabel.text = `Score: ${score}`;
-        this.highScoreLabel.text = `High Score: ${this.highScoreTracker.highScore}`;
+        this.#scoreLabel.text = `Score: ${score}`;
+        this.#highScoreLabel.text = `High Score: ${this.highScoreTracker.highScore}`;
     }
 
     updateLives(lives) {
-        this.livesLabel.text = `Lives: ${lives}`;
+        this.#livesLabel.text = `Lives: ${lives}`;
     }
 }

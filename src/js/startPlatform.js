@@ -1,6 +1,5 @@
 import { Actor, CollisionType, Shape, Vector } from "excalibur";
 import { Resources } from "./resources";
-import { Platform } from "./platform";
 
 export class StartPlatform extends Actor {
 

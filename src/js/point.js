@@ -22,6 +22,7 @@ export class Point extends Actor {
     }
 
     hit() {
+        this.scene?.emit('pointCollected');
         this.kill();
     }
 }

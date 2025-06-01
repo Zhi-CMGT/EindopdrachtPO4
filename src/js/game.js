@@ -1,7 +1,7 @@
 import '../css/style.css'
-import { Engine, DisplayMode, Keys, Vector, SolverStrategy, Label, Font, Color } from "excalibur"
+import { Engine, DisplayMode, Keys, Vector, SolverStrategy, Label, Font, Color, TextAlign } from "excalibur"
 import { ResourceLoader, Resources } from './resources.js'
-import { player } from './player.js'
+import { Player } from './player.js'
 import { Background } from './background.js'
 import { Platform } from './platform.js'
 import { Obstacle } from './obstacle.js'
@@ -16,6 +16,8 @@ export class Game extends Engine {
     scoreTracker;
     highScoreTracker;
     playerLivesTracker;
+    totalPoints = 0;
+    collectedPoints = 0;
 
     constructor() {
         super({
@@ -35,7 +37,6 @@ export class Game extends Engine {
         this.players = [];
 
         this.start(ResourceLoader).then(() => this.startGame())
-
     }
 
     startGame() {
@@ -46,11 +47,7 @@ export class Game extends Engine {
 
         this.add(new Portal(180, 100));
 
-        this.scoreTracker = { score: 0 };
-        this.highScoreTracker = { highScore: this.highScore };
-        this.playerLivesTracker = { playerLives: this.playerLives };
-
-        const player1 = new player(
+        const player1 = new Player(
             Keys.Left,
             Keys.Right,
             Keys.Up,
@@ -60,7 +57,7 @@ export class Game extends Engine {
         );
         this.add(player1);
 
-        const player2 = new player(
+        const player2 = new Player(
             Keys.A,
             Keys.D,
             Keys.W,
@@ -86,9 +83,7 @@ export class Game extends Engine {
         this.add(new Platform(1250, 340));
 
         this.add(new Platform(950, 220));
-
         this.add(new Platform(600, 120));
-
 
         for (let i = 0; i < 5; i++) {
             const platforms = this.currentScene.actors.filter(actor => actor instanceof Platform);
@@ -117,8 +112,13 @@ export class Game extends Engine {
         pointRows.forEach(({ x, y }) => {
             for (let i = 0; i < pointsPerRow; i++) {
                 this.add(new Point(x + (i * spacing), y));
+                this.totalPoints++;
             }
         });
+
+        this.scoreTracker = { score: 0 };
+        this.highScoreTracker = { highScore: this.highScore };
+        this.playerLivesTracker = { playerLives: this.playerLives };
 
         this.ui = new UI(
             [player1, player2],
@@ -135,8 +135,6 @@ export class Game extends Engine {
                 }
             }
         });
-
-        this.showDebug(true);
     }
 
     gameOver() {
@@ -151,6 +149,48 @@ export class Game extends Engine {
         }
 
         setTimeout(() => window.location.reload(), 200);
+    }
+
+    gameCompleted() {
+        this.gameHasEnded = true;
+        console.log("Game Completed!");
+
+        const gameCompletedLabel = new Label({
+            text: "Game Completed!",
+            pos: new Vector(this.drawWidth / 2, this.drawHeight / 2 - 100),
+            font: new Font({
+                family: "Arial",
+                size: 50,
+                // @ts-ignore
+                unit: "px",
+                color: Color.White,
+                textAlign: TextAlign.Center
+            }),
+            anchor: Vector.Half
+        });
+
+        const restartLabel = new Label({
+            text: "Press R to Restart",
+            pos: new Vector(this.drawWidth / 2, this.drawHeight / 2),
+            font: new Font({
+                family: "Arial",
+                size: 30,
+                // @ts-ignore
+                unit: "px",
+                color: Color.White,
+                textAlign: TextAlign.Center
+            }),
+            anchor: Vector.Half
+        });
+
+        this.currentScene.add(gameCompletedLabel);
+        this.currentScene.add(restartLabel);
+
+        this.input.keyboard.on("press", (evt) => {
+            if (evt.key === Keys.R) {
+                window.location.reload();
+            }
+        });
     }
 }
 
