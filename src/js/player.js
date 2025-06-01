@@ -2,14 +2,17 @@ import { Actor, CollisionType, DegreeOfFreedom, Shape, Side, Vector } from "exca
 import { Obstacle } from "./obstacle";
 import { Point } from "./point";
 import { Portal } from "./portal";
-// @ts-ignore
-import { Game } from "./game";
 
 export class Player extends Actor {
 
     score = 0;
     health = 3;
+    #leftKey;
+    #rightKey;
+    #upKey;
+    #downKey;
     isGrounded = false;
+    #speed = 200;
 
     constructor(leftKey, rightKey, upKey, downKey, sprite, startPos) {
         super({
@@ -21,14 +24,12 @@ export class Player extends Actor {
 
         this.graphics.use(sprite);
 
-        this.leftKey = leftKey;
-        this.rightKey = rightKey;
-        this.upKey = upKey;
-        this.downKey = downKey;
-        this.speed = 200;
+        this.#leftKey = leftKey;
+        this.#rightKey = rightKey;
+        this.#upKey = upKey;
+        this.#downKey = downKey;
     }
 
-    // @ts-ignore
     onInitialize(engine) {
         this.body.useGravity = true;
         this.body.limitDegreeOfFreedom.push(DegreeOfFreedom.Rotation);
@@ -51,14 +52,14 @@ export class Player extends Actor {
     onPreUpdate(engine) {
         let xspeed = 0;
 
-        if (engine.input.keyboard.isHeld(this.leftKey)) {
-            xspeed = -this.speed;
+        if (engine.input.keyboard.isHeld(this.#leftKey)) {
+            xspeed = -this.#speed;
         }
-        if (engine.input.keyboard.isHeld(this.rightKey)) {
-            xspeed = this.speed;
+        if (engine.input.keyboard.isHeld(this.#rightKey)) {
+            xspeed = this.#speed;
         }
 
-        if (engine.input.keyboard.wasPressed(this.upKey) && this.isGrounded) {
+        if (engine.input.keyboard.wasPressed(this.#upKey) && this.isGrounded) {
             this.vel.y = -480;
             this.isGrounded = false;
         }

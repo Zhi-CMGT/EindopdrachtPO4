@@ -5,6 +5,9 @@ export class UI extends Actor {
     #scoreLabel;
     #highScoreLabel;
     #livesLabel;
+    #scoreTracker;
+    #highScoreTracker;
+    #playerLivesTracker;
 
     constructor(players, scoreTracker, highScoreTracker, playerLivesTracker) {
         super({
