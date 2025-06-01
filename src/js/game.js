@@ -1,5 +1,5 @@
 import '../css/style.css'
-import { Engine, DisplayMode, Keys, Vector, SolverStrategy } from "excalibur"
+import { Engine, DisplayMode, Keys, Vector, SolverStrategy, Label, Font, Color } from "excalibur"
 import { ResourceLoader, Resources } from './resources.js'
 import { player } from './player.js'
 import { Background } from './background.js'
@@ -34,7 +34,7 @@ export class Game extends Engine {
         this.players = [];
 
         this.start(ResourceLoader).then(() => this.startGame())
-
+        
     }
 
     startGame() {
@@ -43,7 +43,8 @@ export class Game extends Engine {
         const background = new Background();
         this.add(background);
 
-        this.scoreTracker = { score: 0 };
+
+        this.scoreTracker = {score: 0};
         this.highScoreTracker = { highScore: this.highScore };
         this.playerLivesTracker = { playerLives: this.playerLives };
 
@@ -86,6 +87,7 @@ export class Game extends Engine {
 
         this.add(new Platform(600, 120));
 
+
         for (let i = 0; i < 5; i++) {
             const platforms = this.currentScene.actors.filter(actor => actor instanceof Platform);
 
@@ -98,7 +100,7 @@ export class Game extends Engine {
             this.add(obstacle);
         }
 
-        const pointRows = [
+       const pointRows = [
             { x: 150, y: 500 },
             { x: 300, y: 300 },
             { x: 580, y: 450 },
@@ -150,4 +152,4 @@ export class Game extends Engine {
     }
 }
 
-new Game()
+new Game();

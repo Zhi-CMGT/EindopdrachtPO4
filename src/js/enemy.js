@@ -1,7 +1,7 @@
 import { Actor, CollisionType, Shape, Vector } from "excalibur";
 import { Resources } from "./resources";
 
-export class Point extends Actor {
+export class Enemy extends Actor {
 
     constructor(x, y, width, height) {
 
@@ -9,19 +9,18 @@ export class Point extends Actor {
             pos: new Vector(x, y),
             width: width,
             height: height,
-            collisionType: CollisionType.Passive,
-        });
-
+            collisionType: CollisionType.Fixed,
+        })
     }
 
     onInitialize(engine) {
-        this.graphics.use(Resources.Point.toSprite());
-        this.scale = new Vector(0.09, 0.09);
-
+        this.graphics.use(Resources.Enemy.toSprite());
+        this.scale = new Vector(0.2, 0.2);
         this.collider.set(Shape.Box(200, 350, Vector.Half, new Vector(0, 0)));
     }
 
     hit() {
-        this.kill();
+        this.actions.blink(this.width, this.height)
     }
+
 }
